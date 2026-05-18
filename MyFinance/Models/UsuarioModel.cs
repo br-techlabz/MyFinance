@@ -9,7 +9,7 @@ namespace MyFinance.Models
 {
     public class UsuarioModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
@@ -28,6 +28,9 @@ namespace MyFinance.Models
             {
                 if(dataTable.Rows.Count == 1)
                 {
+                    Id = int.Parse(dataTable.Rows[0]["ID"].ToString());
+                    Nome = dataTable.Rows[0]["NOME"].ToString();
+                    DataNascimento = DateTime.Parse(dataTable.Rows[0]["DATA_NASCIMENTO"].ToString());
                     return true;
                 }
             }
