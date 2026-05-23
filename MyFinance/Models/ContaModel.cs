@@ -1,4 +1,5 @@
-﻿using MyFinance.Util;
+﻿using Microsoft.AspNetCore.Http;
+using MyFinance.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,12 +15,26 @@ namespace MyFinance.Models
         public Double Saldo { get; set; }
         public int Usuario_Id { get; set; }
 
+        IHttpContextAccessor HttpContextAccessor;
+
+        public ContaModel()
+        {
+
+        }
+
+        //rcebe o contexto para acesso as variáveis de sessão
+        public ContaModel(IHttpContextAccessor httpContextAccessor)
+        {
+            HttpContextAccessor = httpContextAccessor;
+        }
+
         public List<ContaModel> ListaConta()
         {
             List<ContaModel> lista = new List<ContaModel>();
             ContaModel item;
 
-            string id_usuario_logado = "1";
+            string id_usuario_logado = HttpContextAccessor.HttpContext.Session.GetString("IdUsuarioLogado");
+
             string sql = $"SELECT Id, Nome, Saldo, Usuario_Id from CONTA WHERE Usuario_Id = {id_usuario_logado}";
             DAL objDAL = new DAL();
             DataTable dt = objDAL.RetDataTable(sql);
