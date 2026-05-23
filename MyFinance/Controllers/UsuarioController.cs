@@ -35,7 +35,7 @@ namespace MyFinance.Controllers
                 HttpContext.Session.SetString("NomeUsuarioLogado", usuario.Nome);
                 HttpContext.Session.SetString("IdUsuarioLogado", usuario.Id.ToString());
                 TempData["NomeUsuarioLogado"] = usuario.Nome;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Menu", "Home");
             }
             else
             {
