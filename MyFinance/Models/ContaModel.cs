@@ -2,6 +2,7 @@
 using MyFinance.Util;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,11 +12,16 @@ namespace MyFinance.Models
     public class ContaModel
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "O Nome da conta é obrigatório.")]
         public string Nome { get; set; }
-        public Double Saldo { get; set; }
+
+        [Required(ErrorMessage = "O Saldo da conta é obrigatório.")]
+        public double Saldo { get; set; }
+
         public int Usuario_Id { get; set; }
 
-        IHttpContextAccessor HttpContextAccessor;
+        public IHttpContextAccessor HttpContextAccessor { get; set; }
 
         public ContaModel()
         {
@@ -49,6 +55,19 @@ namespace MyFinance.Models
             }
 
             return lista;
+        }
+
+        public void Excluir(int id)
+        {
+            new DAL().ExecutarComandoSQL("DELETE FROM CONTA WHERE ID = " + id);
+        }
+
+        public void Insert()
+        {
+            string id_usuario_logado = HttpContextAccessor.HttpContext.Session.GetString("IdUsuarioLogado");
+            string sql = $"INSERT INTO CONTA (NOME, SALDO, USUARIO_ID) VALUES ('{Nome}', '{Saldo}','{id_usuario_logado}')";
+            DAL objDAL = new DAL();
+            objDAL.ExecutarComandoSQL(sql);
         }
     }
 }

@@ -12,7 +12,7 @@
             <th>ID</th>
             <th>Nome</th>
             <th>Saldo</th>
-            <th>*</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -24,10 +24,24 @@
                     <td>@item.Id.ToString()</td>
                     <td>@item.Nome.ToString()</td>
                     <td>@item.Saldo.ToString()</td>
-                    <td><button type="button" class="btn btn-danger">Excluir</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button></td>
                 </tr>
             </tbody>
         }
     }
 
 </table>
+
+<button type="button" class="btn btn-block btn-primary" onclick="NovaConta()">Nova Conta</button>
+
+<script>
+    function NovaConta()
+    {
+        window.location.href = "../Conta/NovaConta";
+    }
+
+    function Excluir(id_conta)
+    {
+        window.location.href = "../Conta/ExcluirConta/" + id_conta;     
+    }
+</script>
