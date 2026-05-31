@@ -1,0 +1,92 @@
+﻿@model TransacaoModel
+
+@{
+    ViewData["Title"] = "Novo Plano de Contas";
+
+    var vData = "";
+    var vTipo = "";
+    var vHistorico = "";
+    var vValor = "";
+    var vId = 0;
+
+    try
+    {
+        vHistorico = @ViewBag.Registro.Descricao.ToString();
+        vTipo = @ViewBag.Registro.Tipo.ToString();
+
+        vId = int.Parse(@ViewBag.Registro.Id.ToString());
+    }catch (Exception ex)
+    {
+
+    }
+
+
+}
+
+<h3>Registrar Transação</h3>
+<form asp-controller="Transacao" asp-action="Registrar">
+    <input type="hidden" asp-for="Id" value="@vId" />
+
+    <div class="form-group">
+        <label for="data">Data:</label>
+        <input type="date" class="form-control" id="data" asp-for="Data" value="@vData" />
+        <span asp-validation-for="Data" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label>Tipo:</label>
+        @{
+                if(vTipo == "R")
+                {
+            <div class="radio"><label><input type="radio" asp-for="Tipo" value="R" checked />Receita</label></div>
+            <div class="radio"><label><input type="radio" asp-for="Tipo" value="D" />Despesa</label></div>
+                }
+                else
+                {
+            <div class="radio"><label><input type="radio" asp-for="Tipo" value="R" />Receita</label></div>
+            <div class="radio"><label><input type="radio" asp-for="Tipo" value="D" checked />Despesa</label></div>
+                }
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="valor">Valor:</label>
+        <input type="number" class="form-control" id="valor" asp-for="Valor" value="@vValor" />
+        <span asp-validation-for="Valor" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="historico">Histórico:</label>
+        <input type="text" class="form-control" id="historico" asp-for="Descricao" value="@vHistorico" />
+        <span asp-validation-for="Descricao" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Conta:</label>
+        <select asp-for="Conta_Id" name="conta">
+            @{
+                foreach (var item in (List<ContaModel>)ViewBag.ListaContas)
+                {
+                    <option value="@item.Id.ToString()">@item.Nome.ToString()</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Plano de Contas:</label>
+        <select asp-for="PlanoConta_Id" name="plano_contas">
+            @{
+                foreach (var item in (List<PlanoContaModel>)ViewBag.PlanoContas)
+                {
+                <option value="@item.Id.ToString()">@item.Descricao.ToString()</option>
+                }
+            }
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-block btn-primary">Registrar</button>
+</form>
+

@@ -42,6 +42,26 @@ namespace MyFinance.Models
 
         }
 
+        internal void Insert()
+        {
+            string id_usuario_logado = HttpContextAccessor.HttpContext.Session.GetString("IdUsuarioLogado");
+            string sql = "";
+            if (Id == 0)
+            {
+                sql = $"insert into transacao(DATA,TIPO,VALOR,DESCRICAO,CONTA_ID,PLANO_CONTAS_ID) " +
+                    $"VALUES ('{Data.ToString()}','{Tipo}',{Valor},'{Descricao}',{Conta_Id},{PlanoConta_Id})";
+            }
+            else
+            {
+                sql = $"UPDATE TRANSACAO SET DATA = '{Data}', TIPO = '{Tipo}', VALOR = {Valor}, DESCRICAO = '{Descricao}'," +
+                    $"CONTA_ID = {Conta_Id}, PLANO_CONTAS_ID={PlanoConta_Id} " +
+                    $"WHERE ID = '{Id}'";
+            }
+
+            DAL objDAL = new DAL();
+            objDAL.ExecutarComandoSQL(sql);
+        }
+
         public TransacaoModel(IHttpContextAccessor httpContextAccessor)
         {
             HttpContextAccessor = httpContextAccessor;
@@ -78,6 +98,31 @@ namespace MyFinance.Models
                 lista.Add(item);
             }
             return lista;
+        }
+
+        public TransacaoModel CarregarRegistro(int? id)
+        {
+            TransacaoModel item = new TransacaoModel();
+
+            string sql = $"select t.Id,t.Data,t.Tipo,t.Valor,t.Descricao as Historico,t.Conta_Id,c.Nome as Nome_Conta,t.Plano_Contas_Id," +
+                $"p.Descricao as Plano_Contas,t.Usuario_Id from transacao as t inner join conta c on t.Conta_Id = c.Id " +
+                $"inner join plano_contas p on t.Plano_Contas_Id = p.Id " +
+                $"where t.Id = {id} ";
+            DAL objDAL = new DAL();
+            DataTable dt = objDAL.RetDataTable(sql);
+
+            item.Id = int.Parse(dt.Rows[0]["ID"].ToString());
+            item.Data = DateTime.Parse(dt.Rows[0]["Data"].ToString()).ToString("dd/MM/yyyy");
+            item.Tipo = dt.Rows[0]["Tipo"].ToString();
+            item.Descricao = dt.Rows[0]["Historico"].ToString();
+            item.Valor = double.Parse(dt.Rows[0]["Valor"].ToString());
+            item.Conta_Id = int.Parse(dt.Rows[0]["Conta_Id"].ToString());
+            item.NomeConta = dt.Rows[0]["Nome_Conta"].ToString();
+            item.PlanoConta_Id = int.Parse(dt.Rows[0]["Plano_Contas_Id"].ToString());
+            item.PlanoConta = dt.Rows[0]["Plano_Contas"].ToString();
+            item.Usuario_Id = int.Parse(dt.Rows[0]["Usuario_Id"].ToString());
+
+            return item;
         }
     }
 }
