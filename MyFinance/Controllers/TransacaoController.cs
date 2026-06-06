@@ -39,6 +39,22 @@ namespace MyFinance.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ExcluirTransacao(int id)
+        {
+            TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
+            ViewBag.Registro = objTransacao.CarregarRegistro(id);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Excluir(int id)
+        {
+            TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
+            objTransacao.Excluir(id);
+            return RedirectToAction("Index");
+        }
+
 
         [HttpGet]
         public IActionResult Registrar(int? id)

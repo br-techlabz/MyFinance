@@ -63,6 +63,11 @@ namespace MyFinance.Models
             objDAL.ExecutarComandoSQL(sql);
         }
 
+        internal void Excluir(int id)
+        {
+            new DAL().ExecutarComandoSQL("DELETE FROM TRANSACAO WHERE ID = " + id);
+        }
+
         public TransacaoModel(IHttpContextAccessor httpContextAccessor)
         {
             HttpContextAccessor = httpContextAccessor;
