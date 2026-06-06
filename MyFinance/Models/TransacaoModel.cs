@@ -48,13 +48,14 @@ namespace MyFinance.Models
             string sql = "";
             if (Id == 0)
             {
-                sql = $"insert into transacao(DATA,TIPO,VALOR,DESCRICAO,CONTA_ID,PLANO_CONTAS_ID) " +
-                    $"VALUES ('{Data.ToString()}','{Tipo}',{Valor},'{Descricao}',{Conta_Id},{PlanoConta_Id})";
+                sql = $"insert into transacao(DATA,TIPO,VALOR,DESCRICAO,CONTA_ID,PLANO_CONTAS_ID, USUARIO_ID) " +
+                    $"VALUES ('{DateTime.Parse(Data).ToString("yyyy/MM/dd")}','{Tipo}',{Valor},'{Descricao}'," +
+                    $"{Conta_Id},{PlanoConta_Id},{id_usuario_logado})";
             }
             else
             {
-                sql = $"UPDATE TRANSACAO SET DATA = '{Data}', TIPO = '{Tipo}', VALOR = {Valor}, DESCRICAO = '{Descricao}'," +
-                    $"CONTA_ID = {Conta_Id}, PLANO_CONTAS_ID={PlanoConta_Id} " +
+                sql = $"UPDATE TRANSACAO SET DATA = '{DateTime.Parse(Data).ToString("yyyy/MM/dd")}', TIPO = '{Tipo}', " +
+                    $"VALOR = {Valor}, DESCRICAO = '{Descricao}',CONTA_ID = {Conta_Id}, PLANO_CONTAS_ID={PlanoConta_Id} " +
                     $"WHERE ID = '{Id}'";
             }
 
@@ -108,6 +109,7 @@ namespace MyFinance.Models
                 $"p.Descricao as Plano_Contas,t.Usuario_Id from transacao as t inner join conta c on t.Conta_Id = c.Id " +
                 $"inner join plano_contas p on t.Plano_Contas_Id = p.Id " +
                 $"where t.Id = {id} ";
+
             DAL objDAL = new DAL();
             DataTable dt = objDAL.RetDataTable(sql);
 

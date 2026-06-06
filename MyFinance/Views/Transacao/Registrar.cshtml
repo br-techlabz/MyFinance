@@ -3,18 +3,26 @@
 @{
     ViewData["Title"] = "Novo Plano de Contas";
 
-    var vData = "";
-    var vTipo = "";
-    var vHistorico = "";
-    var vValor = "";
+
     var vId = 0;
+    var vHistorico = "";
+    var vTipo = "";
+    var vData = "";
+    var vContaId = 0;
+    var vPlanoContaId = 0;
+    var vValor = 0.0;
+       
 
     try
     {
+        vId = int.Parse(@ViewBag.Registro.Id.ToString());
         vHistorico = @ViewBag.Registro.Descricao.ToString();
         vTipo = @ViewBag.Registro.Tipo.ToString();
+        vData = DateTime.Parse(@ViewBag.Registro.Data.ToString()).ToString("yyyy-MM-dd");
+        vContaId = int.Parse(@ViewBag.Registro.Conta_Id.ToString());
+        vPlanoContaId = int.Parse(@ViewBag.Registro.PlanoConta_Id.ToString());
+        vValor = double.Parse(@ViewBag.Registro.Valor.ToString());
 
-        vId = int.Parse(@ViewBag.Registro.Id.ToString());
     }catch (Exception ex)
     {
 
@@ -64,11 +72,19 @@
 
     <div class="form-group">
         <label>Conta:</label>
-        <select asp-for="Conta_Id" name="conta">
+        <select asp-for="Conta_Id" name="Conta_id" class="form-control" id="Conta_id">
             @{
                 foreach (var item in (List<ContaModel>)ViewBag.ListaContas)
                 {
-                    <option value="@item.Id.ToString()">@item.Nome.ToString()</option>
+                    if (@item.Id.ToString() == vContaId.ToString())
+                    {
+                        <option selected value="@item.Id.ToString()">@item.Nome.ToString()</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id.ToString()">@item.Nome.ToString()</option>
+                    }
+
                 }
             }
         </select>
@@ -76,11 +92,19 @@
 
     <div class="form-group">
         <label>Plano de Contas:</label>
-        <select asp-for="PlanoConta_Id" name="plano_contas">
+        <select asp-for="PlanoConta_Id" name="PlanoConta_Id" class="form-control" id="PlanoConta_Id">
             @{
                 foreach (var item in (List<PlanoContaModel>)ViewBag.PlanoContas)
                 {
-                <option value="@item.Id.ToString()">@item.Descricao.ToString()</option>
+                    if (@item.Id.ToString() == vPlanoContaId.ToString())
+                    {
+                        <option selected value="@item.Id.ToString()">@item.Descricao.ToString()</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id.ToString()">@item.Descricao.ToString()</option>
+                    }
+                    
                 }
             }
         </select>
