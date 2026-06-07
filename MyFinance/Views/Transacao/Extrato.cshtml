@@ -34,7 +34,7 @@
                 }
             </select>
         </div>
-
+        <button type="button" class="btn btn-block btn-danger" onclick="Limpar()">Limpar</button>
         <button type="submit" class="btn btn-block btn-success">Pesquisar</button>
     </form>
 
@@ -56,6 +56,12 @@
         </thead>
 
         @{
+
+            var TotalReceitas = 0.0;
+            var TotalDespesas = 0.0;
+
+            var vSaldo = 0.0;
+
             foreach (var item in (List<TransacaoModel>)ViewBag.ListaTransacao)
             {
                 <tbody>
@@ -69,19 +75,35 @@
                         <td>R$ @item.Valor.ToString()</td>
                         <td><button type="button" class="btn btn-primary" onclick="Editar(@item.Id.ToString())">Editar</button></td>
                     </tr>
-                </tbody>
-            }
 
-        }
+                        @{ 
+                            if (item.Tipo == "D")
+                            {
+                                TotalDespesas += double.Parse(item.Valor.ToString());
+                            }
+                            else
+                            {
+                                TotalReceitas += double.Parse(item.Valor.ToString());
+                            }
+                        }
+                </tbody>
+                }
+                vSaldo = TotalReceitas - TotalDespesas;
+
+          }
 
     </table>
 
-    <h3><strong>Saldo: </strong>R$ 0.00</h3>
+    <h3><strong>Saldo: </strong>R$ @vSaldo</h3>
 
 </div>
 <script>
     function Editar(id) {
         window.location.href = "../Transacao/Registrar/" + id;
+    }
+
+    function Limpar(id) {
+        window.location.href = "../Transacao/Extrato";
     }
 </script>
 

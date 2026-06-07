@@ -82,12 +82,35 @@ namespace MyFinance.Models
         {
             List<TransacaoModel> lista = new List<TransacaoModel>();
             TransacaoModel item;
+
+
+            //Utilizado pela view Extrato
+            string filtro = "";
+            if ((DataInicial !=null) && (DataFinal != null))
+            {
+                filtro += $" and t.Data >= '{DateTime.Parse(DataInicial).ToString("yyyy/MM/dd")}' and t.Data <= '{DateTime.Parse(DataFinal).ToString("yyyy/MM/dd")}' ";
+            }
+
+            if(Tipo != null)
+            {
+                if (Tipo != "A")
+                {
+                    filtro += $" and t.Tipo = '{Tipo}'";
+                }
+            }
+
+            if(Conta_Id != 0)
+            {
+                filtro += $" and t.Conta_Id = '{Conta_Id}'";
+            }
+            //fim
+
             string id_usuario_logado = HttpContextAccessor.HttpContext.Session.GetString("IdUsuarioLogado");
 
             string sql = $"select t.Id,t.Data,t.Tipo,t.Valor,t.Descricao as Historico,t.Conta_Id,c.Nome as Nome_Conta,t.Plano_Contas_Id," +
                 $"p.Descricao as Plano_Contas,t.Usuario_Id from transacao as t inner join conta c on t.Conta_Id = c.Id " +
                 $"inner join plano_contas p on t.Plano_Contas_Id = p.Id " +
-                $"where t.Usuario_Id = {id_usuario_logado} " +
+                $"where t.Usuario_Id = {id_usuario_logado} {filtro} " +
                 $"order by t.Data desc limit 20";
             DAL objDAL = new DAL();
             DataTable dt = objDAL.RetDataTable(sql);
