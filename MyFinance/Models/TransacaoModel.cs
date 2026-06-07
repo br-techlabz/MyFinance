@@ -14,8 +14,8 @@ namespace MyFinance.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "A Data é obrigatória")]
-        public string Data { get; set; }       
-
+        public string Data { get; set; }  
+        
         public string Tipo { get; set; }
 
         [Required(ErrorMessage = "O Valor é obrigatório")]
@@ -33,6 +33,11 @@ namespace MyFinance.Models
         public string PlanoConta { get; set; }
 
         public int Usuario_Id { get; set; }
+
+        //campos usados para filtro no Extrato
+        public string DataInicial { get; set; }
+
+        public string DataFinal { get; set; }
 
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 

@@ -70,8 +70,13 @@ namespace MyFinance.Controllers
             return View();
         }
 
-        public IActionResult Extrato()
+        [HttpGet]
+        [HttpPost]
+        public IActionResult Extrato(TransacaoModel formulario)
         {
+            formulario.HttpContextAccessor = HttpContextAccessor;
+            ViewBag.ListaTransacao = formulario.ListaTransacoes();
+            ViewBag.ListaContas = new ContaModel(HttpContextAccessor).ListaConta();
             return View();
         }
 
