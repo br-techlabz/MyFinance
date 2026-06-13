@@ -2,34 +2,50 @@
 
 
 @{
-    try
-    {
-        if (TempData["MensagemLoginInvalido"].ToString() != "")
-        {
-            <div class="alert alert-danger">
-                <strong>Erro</strong> @TempData["MensagemLoginInvalido"]
-            </div>
-        }
-    }
-    catch { }
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+
 
 }
 
+<div class="container" style="background-color: rgba(239, 239, 239, 0.95); padding:20px; border-radius:10px; width:350px">
+    @{
+        try
+        {
+            if (TempData["MensagemLoginInvalido"].ToString() != "")
+            {
+                <div class="alert alert-danger">
+                    <strong>Erro</strong> @TempData["MensagemLoginInvalido"]
+                </div>
+            }
+        }
+        catch
+        {
 
-<form asp-controller="Usuario" asp-action="ValidarLogin">
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" asp-for="Email" />
-    </div>
-    <div class="form-group">
-        <label for="pwd">Senha:</label>
-        <input type="password" class="form-control" id="pwd" asp-for="Senha" />
-    </div>
-    <div class="checkbox">
-        <label><input type="checkbox" />Lembrar de mim</label>
-    </div>
-    <button type="submit" class="btn btn-default">Entrar</button>
+        }
+    }
+    <form asp-controller="Usuario" asp-action="ValidarLogin">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" asp-for="Email" />
+        </div>
+        <div class="form-group">
+            <label for="pwd">Senha:</label>
+            <input type="password" class="form-control" id="pwd" asp-for="Senha" />
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" />Lembrar de mim</label>
+        </div>
+        <button type="submit" class="btn btn-default">Entrar</button>
+        <button type="button" class="btn btn-primary" onclick="registrar()">Registrar</button>
+    </form>
+</div>
+
+<script>
+    function registrar() {
+        window.location.href = "../../Usuario/Registrar";
+    }
+</script>
 
 
-</form>
 
